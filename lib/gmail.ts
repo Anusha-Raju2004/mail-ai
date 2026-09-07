@@ -8,6 +8,8 @@ export interface MessageSummary {
   from: string;
   date: string;
   labelIds?: string[];
+  isStarred?: boolean;
+  isRead?: boolean;
 }
 
 export interface DetailedMessage extends MessageSummary {
@@ -81,6 +83,8 @@ export async function listMessages(
       });
 
       const headers = detail.data.payload?.headers || [];
+      const labels = detail.data.labelIds || [];
+
       return {
         id: msg.id!,
         threadId: msg.threadId!,
@@ -88,7 +92,9 @@ export async function listMessages(
         subject: getHeaderValue(headers, "Subject"),
         from: getHeaderValue(headers, "From"),
         date: getHeaderValue(headers, "Date"),
-        labelIds: detail.data.labelIds || [],
+        labelIds: labels,
+        isStarred: labels.includes("STARRED"),
+        isRead: !labels.includes("UNREAD"),
       };
     })
   );
@@ -109,6 +115,7 @@ export async function getMessage(
 
   const headers = res.data.payload?.headers || [];
   const body = getMessageBody(res.data.payload);
+  const labels = res.data.labelIds || [];
 
   return {
     id: res.data.id!,
@@ -117,7 +124,9 @@ export async function getMessage(
     subject: getHeaderValue(headers, "Subject"),
     from: getHeaderValue(headers, "From"),
     date: getHeaderValue(headers, "Date"),
-    labelIds: res.data.labelIds || [],
+    labelIds: labels,
+    isStarred: labels.includes("STARRED"),
+    isRead: !labels.includes("UNREAD"),
     body,
   };
 }
