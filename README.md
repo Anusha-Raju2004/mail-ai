@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Mail AI — Intelligent Email Management Client**
+An AI-powered web client built on Next.js 15 that integrates directly with the Gmail API to simplify inbox management, automated email drafting, translation, and natural language assistance.
 
-## Getting Started
+**Key Features**
+Google OAuth & Authentication: Secure sign-in leveraging NextAuth.js and Google OAuth 2.0 API flows.
 
-First, run the development server:
+Email Management: Fetch, filter, and view Gmail messages in real time with custom UI components (EmailList, EmailDetail, Filters).
 
-```bash
+AI Assistant & Chat: In-app AI agent integrated into the dashboard to assist with email queries, summarizing threads, and auto-composing responses.
+
+Smart Utils: Built-in translation (utils/translator.js) and email formatting logic (utils/email-formatter.js).
+
+State Management: Reactive, persistent client-side application state managed using Zustand (store/appState.ts).
+
+**Technical Stack & Architecture**
+Framework: Next.js 15 (App Router)
+
+Language: TypeScript & JavaScript (ESNext)
+
+Styling: Tailwind CSS / PostCSS
+
+Authentication: NextAuth.js (app/api/auth/[...nextauth])
+
+State Management: Zustand (store/appState.ts)
+
+External APIs: Google OAuth 2.0, Gmail REST API, AI/LLM Provider API
+
+**Project Architecture**
+
+mail-ai/
+├── app/
+│   ├── api/
+│   │   ├── assistant/      # AI assistant backend route handler
+│   │   ├── auth/           # NextAuth route configuration
+│   │   ├── google/         # OAuth callback & credential handlers
+│   │   └── gmail/          # Gmail API proxy & endpoints
+│   ├── layout.tsx          # Root layout with global providers
+│   └── page.tsx            # Main application workspace
+├── components/             # Reusable UI Components
+│   ├── AssistantChat.tsx   # Conversational AI side-panel
+│   ├── ComposeForm.tsx     # Smart draft composer
+│   ├── EmailDetail.tsx     # Full view email pane
+│   ├── EmailList.tsx       # Infinite-scroll / paginated email inbox
+│   └── ...
+├── lib/
+│   ├── ai/                 # Core AI assistant logic execution
+│   └── utils/              # Email utilities & language translators
+└── store/                  # Application dynamic state (Zustand)
+
+**Getting Started**
+**Prerequisites**
+Node.js 18.x or higher
+
+npm / yarn / pnpm
+
+Google Cloud Console account with Gmail API & OAuth 2.0 enabled
+
+**Installation**
+1) Clone the repository (Private Access Required):
+
+git clone https://github.com/<your-username>/mail-ai.git
+cd mail-ai
+
+2) Install dependencies:
+
+npm install
+
+3) Configure Environment Variables:
+Create a .env.local file in the root directory and add the following keys:
+# NextAuth Config
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_generated_nextauth_secret
+
+# Google OAuth Credentials
+GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# AI Agent / LLM API Key
+AI_API_KEY=your_ai_provider_api_key
+
+4) Run the Development Server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5) Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Key Architecture Decisions & Trade-offs**
+1) Next.js App Router API Routes over Direct Client Calls
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Decision: All Gmail API interactions and AI operations are proxied through Server Routes (app/api/gmail, app/api/assistant).
 
-## Learn More
+Trade-off: Adds minor server latency compared to direct client fetching, but prevents leakages of OAuth tokens and LLM API keys to the client side.
 
-To learn more about Next.js, take a look at the following resources:
+2) Client-State Management via Zustand
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Decision: Used Zustand (store/appState.ts) for global UI states (selected thread, assistant panel visibility, active draft) rather than native React Context.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Trade-off: Adds a minimal bundle dependency, but significantly eliminates unnecessary re-renders across heavy components like EmailList and AssistantChat.
 
-## Deploy on Vercel
+3) Hybrid TypeScript/JavaScript Approach for Utilities
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Decision: Kept high-level pages and API contracts strictly typed (.ts / .tsx), while maintaining rapid script iterations in utils and lib/ai/assistant.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Trade-off: Reduces compile-time checking overhead for AI string manipulation, but requires runtime validation checks.
+
+**Images/Screenshots**
+<img width="1911" height="948" alt="Screenshot 2026-09-08 032631" src="https://github.com/user-attachments/assets/f1bc6eef-945a-47e5-b27b-dc87fb21780d" />
+<img width="1917" height="922" alt="Screenshot 2026-09-08 032704" src="https://github.com/user-attachments/assets/df02236e-1d10-40cf-aa5f-e5876d340628" />
+<img width="1916" height="912" alt="Screenshot 2026-09-08 032743" src="https://github.com/user-attachments/assets/68c32514-a911-44d2-8308-bccb2b8a6078" />
+<img width="1898" height="896" alt="Screenshot 2026-09-08 034808" src="https://github.com/user-attachments/assets/f363143e-38c5-40e3-9378-67a8b600f0a8" />
+
+
+
