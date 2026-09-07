@@ -30,25 +30,10 @@ External APIs: Google OAuth 2.0, Gmail REST API, AI/LLM Provider API
 
 **Project Architecture**
 
-mail-ai/
-├── app/
-│   ├── api/
-│   │   ├── assistant/      # AI assistant backend route handler
-│   │   ├── auth/           # NextAuth route configuration
-│   │   ├── google/         # OAuth callback & credential handlers
-│   │   └── gmail/          # Gmail API proxy & endpoints
-│   ├── layout.tsx          # Root layout with global providers
-│   └── page.tsx            # Main application workspace
-├── components/             # Reusable UI Components
-│   ├── AssistantChat.tsx   # Conversational AI side-panel
-│   ├── ComposeForm.tsx     # Smart draft composer
-│   ├── EmailDetail.tsx     # Full view email pane
-│   ├── EmailList.tsx       # Infinite-scroll / paginated email inbox
-│   └── ...
-├── lib/
-│   ├── ai/                 # Core AI assistant logic execution
-│   └── utils/              # Email utilities & language translators
-└── store/                  # Application dynamic state (Zustand)
+
+<img width="547" height="437" alt="image" src="https://github.com/user-attachments/assets/382a232a-b7a3-4414-a008-12c4f943308f" />
+
+
 
 **Getting Started**
 
@@ -68,11 +53,11 @@ Google Cloud Console account with Gmail API & OAuth 2.0 enabled
 
 2) Install dependencies:
 
-npm install
+   npm install
 
 3) Configure Environment Variables:
 
-Create a .env.local file in the root directory and add the following keys:
+   Create a .env.local file in the root directory and add the following keys:
 
 # NextAuth Config
 
@@ -92,7 +77,7 @@ AI_API_KEY=your_ai_provider_api_key
 
 4) Run the Development Server:
 
-npm run dev
+   npm run dev
 
 5) Open http://localhost:3000 in your browser.
 
@@ -100,21 +85,21 @@ npm run dev
 
 1) Next.js App Router API Routes over Direct Client Calls
 
-Decision: All Gmail API interactions and AI operations are proxied through Server Routes (app/api/gmail, app/api/assistant).
+   Decision: All Gmail API interactions and AI operations are proxied through Server Routes (app/api/gmail, app/api/assistant).
 
-Trade-off: Adds minor server latency compared to direct client fetching, but prevents leakages of OAuth tokens and LLM API keys to the client side.
+   Trade-off: Adds minor server latency compared to direct client fetching, but prevents leakages of OAuth tokens and LLM API keys to the client side.
 
 2) Client-State Management via Zustand
 
-Decision: Used Zustand (store/appState.ts) for global UI states (selected thread, assistant panel visibility, active draft) rather than native React Context.
+   Decision: Used Zustand (store/appState.ts) for global UI states (selected thread, assistant panel visibility, active draft) rather than native React Context.
 
-Trade-off: Adds a minimal bundle dependency, but significantly eliminates unnecessary re-renders across heavy components like EmailList and AssistantChat.
+   Trade-off: Adds a minimal bundle dependency, but significantly eliminates unnecessary re-renders across heavy components like EmailList and AssistantChat.
 
 3) Hybrid TypeScript/JavaScript Approach for Utilities
 
-Decision: Kept high-level pages and API contracts strictly typed (.ts / .tsx), while maintaining rapid script iterations in utils and lib/ai/assistant.js.
+   Decision: Kept high-level pages and API contracts strictly typed (.ts / .tsx), while maintaining rapid script iterations in utils and lib/ai/assistant.js.
 
-Trade-off: Reduces compile-time checking overhead for AI string manipulation, but requires runtime validation checks.
+   Trade-off: Reduces compile-time checking overhead for AI string manipulation, but requires runtime validation checks.
 
 **Images/Screenshots**
 
