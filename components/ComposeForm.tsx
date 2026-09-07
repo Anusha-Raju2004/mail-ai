@@ -1,11 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppState } from "@/store/appState";
 
 export default function ComposeForm() {
   const { composeDraft, setComposeDraft, resetComposeDraft, setView } = useAppState();
   const [sending, setSending] = useState(false);
+
+  const [to, setTo] = useState(composeDraft.to || "");
+  const [subject, setSubject] = useState(composeDraft.subject || "");
+  const [body, setBody] = useState(composeDraft.body || "");
+
+  // Always force local state to match store draft on external updates
+  useEffect(() => {
+    setTo(composeDraft.to || "");
+    setSubject(composeDraft.subject || "");
+    setBody(composeDraft.body || "");
+  }, [composeDraft.to, composeDraft.subject, composeDraft.body]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +26,7 @@ export default function ComposeForm() {
       const res = await fetch("/api/gmail/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(composeDraft),
+        body: JSON.stringify({ to, subject, body }),
       });
 
       if (res.ok) {
@@ -34,16 +45,19 @@ export default function ComposeForm() {
   };
 
   return (
-    <div className="flex-1 p-8 bg-white">
+    <div className="flex-1 p-8 bg-white overflow-y-auto">
       <h1 className="text-xl font-bold text-zinc-900 mb-6">New Message</h1>
       <form onSubmit={handleSend} className="flex flex-col gap-4 max-w-2xl">
         <div>
           <label className="block text-xs font-semibold text-zinc-500 mb-1">To</label>
           <input
-            type="email"
+            type="text"
             required
-            value={composeDraft.to}
-            onChange={(e) => setComposeDraft({ to: e.target.value })}
+            value={to}
+            onChange={(e) => {
+              setTo(e.target.value);
+              setComposeDraft({ to: e.target.value });
+            }}
             className="w-full px-3 py-2 border rounded-lg text-zinc-800 focus:outline-blue-500"
           />
         </div>
@@ -53,8 +67,11 @@ export default function ComposeForm() {
           <input
             type="text"
             required
-            value={composeDraft.subject}
-            onChange={(e) => setComposeDraft({ subject: e.target.value })}
+            value={subject}
+            onChange={(e) => {
+              setSubject(e.target.value);
+              setComposeDraft({ subject: e.target.value });
+            }}
             className="w-full px-3 py-2 border rounded-lg text-zinc-800 focus:outline-blue-500"
           />
         </div>
@@ -64,8 +81,11 @@ export default function ComposeForm() {
           <textarea
             rows={10}
             required
-            value={composeDraft.body}
-            onChange={(e) => setComposeDraft({ body: e.target.value })}
+            value={body}
+            onChange={(e) => {
+              setBody(e.target.value);
+              setComposeDraft({ body: e.target.value });
+            }}
             className="w-full px-3 py-2 border rounded-lg text-zinc-800 focus:outline-blue-500"
           />
         </div>
@@ -80,7 +100,10 @@ export default function ComposeForm() {
           </button>
           <button
             type="button"
-            onClick={() => setView("inbox")}
+            onClick={() => {
+              resetComposeDraft();
+              setView("inbox");
+            }}
             className="px-4 py-2.5 text-zinc-600 hover:bg-zinc-100 rounded-lg transition"
           >
             Cancel
