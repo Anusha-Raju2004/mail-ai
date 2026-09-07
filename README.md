@@ -1,7 +1,9 @@
 **Mail AI — Intelligent Email Management Client**
+
 An AI-powered web client built on Next.js 15 that integrates directly with the Gmail API to simplify inbox management, automated email drafting, translation, and natural language assistance.
 
 **Key Features**
+
 Google OAuth & Authentication: Secure sign-in leveraging NextAuth.js and Google OAuth 2.0 API flows.
 
 Email Management: Fetch, filter, and view Gmail messages in real time with custom UI components (EmailList, EmailDetail, Filters).
@@ -13,6 +15,7 @@ Smart Utils: Built-in translation (utils/translator.js) and email formatting log
 State Management: Reactive, persistent client-side application state managed using Zustand (store/appState.ts).
 
 **Technical Stack & Architecture**
+
 Framework: Next.js 15 (App Router)
 
 Language: TypeScript & JavaScript (ESNext)
@@ -48,7 +51,9 @@ mail-ai/
 └── store/                  # Application dynamic state (Zustand)
 
 **Getting Started**
+
 **Prerequisites**
+
 Node.js 18.x or higher
 
 npm / yarn / pnpm
@@ -58,24 +63,31 @@ Google Cloud Console account with Gmail API & OAuth 2.0 enabled
 **Installation**
 1) Clone the repository (Private Access Required):
 
-git clone https://github.com/<your-username>/mail-ai.git
-cd mail-ai
+   git clone https://github.com/<your-username>/mail-ai.git
+   cd mail-ai
 
 2) Install dependencies:
 
 npm install
 
 3) Configure Environment Variables:
+
 Create a .env.local file in the root directory and add the following keys:
+
 # NextAuth Config
+
 NEXTAUTH_URL=http://localhost:3000
+
 NEXTAUTH_SECRET=your_generated_nextauth_secret
 
 # Google OAuth Credentials
+
 GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
 # AI Agent / LLM API Key
+
 AI_API_KEY=your_ai_provider_api_key
 
 4) Run the Development Server:
@@ -85,6 +97,7 @@ npm run dev
 5) Open http://localhost:3000 in your browser.
 
 **Key Architecture Decisions & Trade-offs**
+
 1) Next.js App Router API Routes over Direct Client Calls
 
 Decision: All Gmail API interactions and AI operations are proxied through Server Routes (app/api/gmail, app/api/assistant).
@@ -104,9 +117,13 @@ Decision: Kept high-level pages and API contracts strictly typed (.ts / .tsx), w
 Trade-off: Reduces compile-time checking overhead for AI string manipulation, but requires runtime validation checks.
 
 **Images/Screenshots**
+
 <img width="1911" height="948" alt="Screenshot 2026-09-08 032631" src="https://github.com/user-attachments/assets/f1bc6eef-945a-47e5-b27b-dc87fb21780d" />
+
 <img width="1917" height="922" alt="Screenshot 2026-09-08 032704" src="https://github.com/user-attachments/assets/df02236e-1d10-40cf-aa5f-e5876d340628" />
+
 <img width="1916" height="912" alt="Screenshot 2026-09-08 032743" src="https://github.com/user-attachments/assets/68c32514-a911-44d2-8308-bccb2b8a6078" />
+
 <img width="1898" height="896" alt="Screenshot 2026-09-08 034808" src="https://github.com/user-attachments/assets/f363143e-38c5-40e3-9378-67a8b600f0a8" />
 
 
