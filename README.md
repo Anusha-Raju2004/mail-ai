@@ -111,6 +111,15 @@ AI_API_KEY=your_ai_provider_api_key
 
 <img width="1898" height="896" alt="Screenshot 2026-09-08 034808" src="https://github.com/user-attachments/assets/f363143e-38c5-40e3-9378-67a8b600f0a8" />
 
+
+
 **Demo**
 
 https://github.com/Anusha-Raju2004/mail-ai/releases/download/v1.0.0/mail-ai-demo.mp4
+
+
+**Live Demo**
+
+Check out the live deployment here:
+
+[Mail AI][https://mail-ai-ruddy.vercel.app](https://mail-ai-ruddy.vercel.app)
